@@ -3,12 +3,12 @@
 <head>
     <title>BootstrapValidator demo</title>
 
-    <link rel="stylesheet" href="/vendor/bootstrap/css/bootstrap.css"/>
-    <link rel="stylesheet" href="/dist/css/bootstrapValidator.css"/>
+     <link rel="stylesheet" href="../vendor/bootstrap/css/bootstrap.css"/>
+    <link rel="stylesheet" href="../dist/css/bootstrapValidator.css"/>
 
-    <script type="text/javascript" src="/vendor/jquery/jquery-1.10.2.min.js"></script>
-    <script type="text/javascript" src="/vendor/bootstrap/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="/dist/js/bootstrapValidator.js"></script>
+    <script type="text/javascript" src="../vendor/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="../vendor/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../dist/js/bootstrapValidator.js"></script>
 </head>
 <body>
     <div class="container">
@@ -20,7 +20,7 @@
                 </div>
 
                 <div class="col-lg-8 col-lg-offset-2">
-                    <form id="defaultForm" method="post" action="remote.html" class="form-horizontal">
+                    <form id="defaultForm" method="post" class="form-horizontal" action="target.php">
                         <div class="form-group">
                             <label class="col-lg-3 control-label">Username</label>
                             <div class="col-lg-5">
@@ -31,7 +31,14 @@
                         <div class="form-group">
                             <label class="col-lg-3 control-label">Email address</label>
                             <div class="col-lg-5">
-                                <input type="text" class="form-control" name="email" autocomplete="off" />
+                                <input type="text" class="form-control" name="email[]" autocomplete="off" />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-lg-3 control-label">Other email address</label>
+                            <div class="col-lg-5">
+                                <input type="text" class="form-control" name="email[]" autocomplete="off" />
                             </div>
                         </div>
 
@@ -95,6 +102,12 @@
 $(document).ready(function() {
     $('#defaultForm').bootstrapValidator({
         message: 'This value is not valid',
+//        live: 'disabled',
+        feedbackIcons: {
+            valid: 'glyphicon glyphicon-ok',
+            invalid: 'glyphicon glyphicon-remove',
+            validating: 'glyphicon glyphicon-refresh'
+        },
         fields: {
             username: {
                 message: 'The username is not valid',
@@ -103,12 +116,18 @@ $(document).ready(function() {
                         message: 'The username is required and can\'t be empty'
                     },
                     remote: {
+                        type: 'POST',
                         url: 'remote.php',
-                        message: 'The username is not available'
+                        message: 'The username is not available',
+                        delay: 1000
+                    },
+                    different: {
+                        field: 'password',
+                        message: 'The username and password can\'t be the same as each other'
                     }
                 }
             },
-            email: {
+            'email[]': {
                 validators: {
                     notEmpty: {
                         message: 'The email address is required and can\'t be empty'
@@ -117,8 +136,10 @@ $(document).ready(function() {
                         message: 'The input is not a valid email address'
                     },
                     remote: {
+                        type: 'POST',
                         url: 'remote.php',
-                        message: 'The email is not available'
+                        message: 'The email is not available',
+                        delay: 2000
                     }
                 }
             },
@@ -130,6 +151,10 @@ $(document).ready(function() {
                     identical: {
                         field: 'confirmPassword',
                         message: 'The password and its confirm are not the same'
+                    },
+                    different: {
+                        field: 'username',
+                        message: 'The password can\'t be the same as username'
                     }
                 }
             },

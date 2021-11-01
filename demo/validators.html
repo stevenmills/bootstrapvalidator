@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="../vendor/bootstrap/css/bootstrap.css"/>
     <link rel="stylesheet" href="../dist/css/bootstrapValidator.css"/>
 
-    <script type="text/javascript" src="../vendor/jquery/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript" src="../vendor/jquery/jquery.min.js"></script>
     <script type="text/javascript" src="../vendor/bootstrap/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../dist/js/bootstrapValidator.js"></script>
 </head>
@@ -20,7 +20,7 @@
                 </div>
 
                 <div class="col-lg-8 col-lg-offset-2">
-                    <form id="defaultForm" method="post" action="validators.html" class="form-horizontal">
+                    <form id="defaultForm" method="post" action="target.php" class="form-horizontal">
                         <fieldset>
                             <legend>Not Empty validator</legend>
 
@@ -48,7 +48,7 @@
                             </div>
 
                             <div class="form-group">
-                                <div class="col-lg-9 col-lg-offset-3">
+                                <div class="col-lg-5 col-lg-offset-3">
                                     <div class="checkbox">
                                         <input type="checkbox" name="acceptTerms" /> Accept the terms and policies
                                     </div>
@@ -74,16 +74,30 @@
                             </div>
 
                             <div class="form-group">
-                                <label class="col-lg-3 control-label">Phone number</label>
+                                <label class="col-lg-3 control-label">US Phone number</label>
                                 <div class="col-lg-5">
-                                    <input type="text" class="form-control" name="phoneNumber" />
+                                    <input type="text" class="form-control" name="phoneNumberUS" />
                                 </div>
                             </div>
 
                             <div class="form-group">
-                                <label class="col-lg-3 control-label">Hex color</label>
+                                <label class="col-lg-3 control-label">UK Phone number</label>
+                                <div class="col-lg-5">
+                                    <input type="text" class="form-control" name="phoneNumberUK" />
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-lg-3 control-label">Hex, RGB, HSL, Keyword color</label>
                                 <div class="col-lg-3">
                                     <input type="text" class="form-control" name="color" />
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-lg-3 control-label">All colors</label>
+                                <div class="col-lg-3">
+                                    <input type="text" class="form-control" name="colorAll" />
                                 </div>
                             </div>
 
@@ -140,6 +154,11 @@
 $(document).ready(function() {
     $('#defaultForm').bootstrapValidator({
         message: 'This value is not valid',
+        feedbackIcons: {
+            valid: 'glyphicon glyphicon-ok',
+            invalid: 'glyphicon glyphicon-remove',
+            validating: 'glyphicon glyphicon-refresh'
+        },
         fields: {
             username: {
                 message: 'The username is not valid',
@@ -185,27 +204,43 @@ $(document).ready(function() {
             website: {
                 validators: {
                     uri: {
+                        allowLocal: true,
                         message: 'The input is not a valid URL'
                     }
                 }
             },
-            phoneNumber: {
+            phoneNumberUS: {
                 validators: {
-                    digits: {
-                        message: 'The value can contain only digits'
+                    phone: {
+                        message: 'The input is not a valid US phone number'
                     }
                 }
             },
+            phoneNumberUK: {
+            	validators: {
+            		phone: {
+            			message: 'The input is not a valid UK phone number',
+            			country: 'GB'
+            		}
+            	}
+            },
             color: {
                 validators: {
-                    hexColor: {
-                        message: 'The input is not a valid hex color'
+                    color: {
+                        type: ['hex', 'rgb', 'hsl', 'keyword'],
+                        message: 'Must be a valid %s color'
                     }
+                }
+            },
+            colorAll: {
+                validators: {
+                    color: { }
                 }
             },
             zipCode: {
                 validators: {
-                    usZipCode: {
+                    zipCode: {
+                        country: 'US',
                         message: 'The input is not a valid US zip code'
                     }
                 }

@@ -4,7 +4,9 @@
 // and open the remote.html file:
 // http://domain.com/demo/remote.html
 
-sleep(5);
+header('Content-type: application/json');
+
+//sleep(5);
 
 $valid = true;
 
@@ -17,7 +19,7 @@ $users = array(
 if (isset($_POST['username']) && array_key_exists($_POST['username'], $users)) {
     $valid = false;
 } else if (isset($_POST['email'])) {
-    $email = $_POST['email'];
+    $email = $_POST['email'][0];
     foreach ($users as $k => $v) {
         if ($email == $v) {
             $valid = false;
